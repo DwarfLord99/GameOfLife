@@ -11,6 +11,8 @@ App::~App() {
 }
 
 bool App::OnInit() {
-	//We begin here
+	// Instantiate the window created in App.h and call Show on window
+	window = new MainWindow();
+	window->Show();
 	return true;
 }
