@@ -11,5 +11,6 @@ App::~App() {
 }
 
 bool App::OnInit() {
+	//We begin here
 	return true;
 }
