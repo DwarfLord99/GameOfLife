@@ -30,5 +30,19 @@ void DrawingPanel::OnPaint(wxPaintEvent& paintEvent)
 	// Brush color. Represents the fill color of the shapes made
 	context->SetBrush(*wxWHITE);
 	// Draws a rectangle shape on the drawing panel
-	context->DrawRectangle(2, 5, 200, 200);
+	//context->DrawRectangle(2, 5, 200, 200);
+
+	// Draws grid. Cells for the grid adjust themselves to match the size of the window
+	// Currently only works for preset grid size, does not adjust when resizing window after game is open
+
+	float cellWidth = this->GetSize().x / (float)pGridSize;
+	float cellHeight = this->GetSize().y / (float)pGridSize;
+
+	for (int i = 0; i < pGridSize; i++)
+	{
+		for (int j = 0; j < pGridSize; j++)
+		{
+			context->DrawRectangle(i * cellWidth, j * cellHeight, cellWidth, cellHeight);
+		}
+	}
 }

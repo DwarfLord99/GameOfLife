@@ -4,7 +4,7 @@ class DrawingPanel :
     public wxPanel
 {
 private:
-    
+    int pGridSize = 15;
 
 public:
     DrawingPanel(wxFrame* parent);
