@@ -52,3 +52,8 @@ void DrawingPanel::SetDrawingPanelSize(wxSize& windowSize)
 	this->SetSize(windowSize);
 	this->Refresh();
 }
+
+void DrawingPanel::SetGridSize(int size)
+{
+	pGridSize = size;
+}

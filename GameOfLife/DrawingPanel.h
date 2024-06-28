@@ -12,5 +12,6 @@ public:
 
     void OnPaint(wxPaintEvent& paintEvent);
     void SetDrawingPanelSize(wxSize& windowSize);
+    void SetGridSize(int size);
 };
 
