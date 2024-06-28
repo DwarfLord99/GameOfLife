@@ -11,5 +11,7 @@ public:
     // Constructor and destructor for the Main Window
     MainWindow();
     ~MainWindow();
+
+    void OnSizeChange(wxSizeEvent& event);
 };
 

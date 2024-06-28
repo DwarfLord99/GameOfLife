@@ -11,5 +11,6 @@ public:
     ~DrawingPanel();
 
     void OnPaint(wxPaintEvent& paintEvent);
+    void SetDrawingPanelSize(wxSize& windowSize);
 };
 

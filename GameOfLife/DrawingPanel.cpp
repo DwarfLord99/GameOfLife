@@ -46,3 +46,9 @@ void DrawingPanel::OnPaint(wxPaintEvent& paintEvent)
 		}
 	}
 }
+
+void DrawingPanel::SetDrawingPanelSize(wxSize& windowSize)
+{
+	this->SetSize(windowSize);
+	this->Refresh();
+}
