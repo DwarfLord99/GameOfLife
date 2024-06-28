@@ -35,5 +35,6 @@ void MainWindow::InitializeGameBoard()
 		pGameBoard[i].resize(pGridSize);
 	}
 
+	//Sets the grid size in the DP
 	pPanelGraphic->SetGridSize(pGridSize);
 }

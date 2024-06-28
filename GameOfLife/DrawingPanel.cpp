@@ -2,12 +2,14 @@
 #include "wx/graphics.h"
 #include "wx/dcbuffer.h"
 
-DrawingPanel::DrawingPanel(wxFrame* parent) : wxPanel(parent, wxID_ANY, wxPoint(0,0), wxSize(400,400))
+DrawingPanel::DrawingPanel(wxFrame* parent, std::vector<std::vector<bool>>& gameBoard) : 
+	wxPanel(parent, wxID_ANY, wxPoint(0,0), wxSize(400,400)), pGameBoard(gameBoard)
 {
 	// Gives control of the rendering of DrawingPanel
 	this->SetBackgroundStyle(wxBG_STYLE_PAINT);
 	// Tells DrawingPanel to use the OnPaint method
 	this->Bind(wxEVT_PAINT, &DrawingPanel::OnPaint, this);
+	this->Bind(wxEVT_LEFT_UP, &DrawingPanel::OnMouseUp, this);
 }
 
 DrawingPanel::~DrawingPanel()
@@ -56,4 +58,31 @@ void DrawingPanel::SetDrawingPanelSize(wxSize& windowSize)
 void DrawingPanel::SetGridSize(int size)
 {
 	pGridSize = size;
+}
+
+void DrawingPanel::OnMouseUp(wxMouseEvent& event)
+{
+	//X and Y coordinate of where the mouse was clicked
+	wxCoord pMouseClickXCoord = event.GetX();
+	wxCoord pMouseClickYCoord = event.GetY();
+
+	float cellWidth = this->GetSize().x / (float)pGridSize;
+	float cellHeight = this->GetSize().y / (float)pGridSize;
+
+	//Determines which box was clicked the grid
+	pMouseClickXCoord = pMouseClickXCoord / cellWidth;
+	pMouseClickYCoord = pMouseClickYCoord / cellHeight;
+
+	//Checks if box clicked is true or false and sets it to the opposite.
+	// True becomes false and false becomes true
+	if (pGameBoard[pMouseClickXCoord][pMouseClickYCoord] == true)
+	{
+		pGameBoard[pMouseClickXCoord][pMouseClickYCoord] = false;
+	}
+	else
+	{
+		pGameBoard[pMouseClickXCoord][pMouseClickYCoord] = true;
+	}
+
+	Refresh();
 }
