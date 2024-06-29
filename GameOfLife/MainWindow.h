@@ -14,6 +14,7 @@ private:
     std::vector<std::vector<bool>> pGameBoard;
 
     wxStatusBar* pStatusBar;
+    wxToolBar* pToolBar;
 public:
     // Constructor and destructor for the Main Window
     MainWindow();
@@ -21,6 +22,11 @@ public:
 
     void OnSizeChange(wxSizeEvent& event);
     void InitializeGameBoard();
+
+    void OnPlayButtonClicked(wxCommandEvent& event);
+    void OnPauseButtonClicked(wxCommandEvent& event);
+    void OnNextButtonClicked(wxCommandEvent& event);
+    void OnTrashButtonClicked(wxCommandEvent& event);
 
     wxDECLARE_EVENT_TABLE();
 };

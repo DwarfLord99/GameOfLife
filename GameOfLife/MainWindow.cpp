@@ -1,12 +1,33 @@
 #include "MainWindow.h"
+#include "play.xpm"
+#include "next.xpm"
+#include "pause.xpm"
+#include "trash.xpm"
 
 wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
 	EVT_SIZE(MainWindow::OnSizeChange)
+	EVT_MENU(10001, MainWindow::OnPlayButtonClicked)
+	EVT_MENU(10002, MainWindow::OnPauseButtonClicked)
+	EVT_MENU(10003, MainWindow::OnNextButtonClicked)
+	EVT_MENU(10004, MainWindow::OnTrashButtonClicked)
 wxEND_EVENT_TABLE()
 
 MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Game of Life", wxPoint(0,0), wxSize(400,400))
 {
 	pStatusBar = CreateStatusBar();
+	
+	wxBitmap playIcon(play_xpm);
+	wxBitmap pauseIcon(pause_xpm);
+	wxBitmap nextIcon(next_xpm);
+	wxBitmap trashIcon(trash_xpm);
+
+	pToolBar = CreateToolBar();
+	pToolBar->AddTool(10001, "Play", playIcon);
+	pToolBar->AddTool(10002, "Pause", pauseIcon);
+	pToolBar->AddTool(10003, "Next", nextIcon);
+	pToolBar->AddTool(10004, "Trash", trashIcon);
+	pToolBar->Realize();
+
 	pPanelGraphic = new DrawingPanel(this, pGameBoard);
 
 	InitializeGameBoard();
@@ -42,4 +63,24 @@ void MainWindow::InitializeGameBoard()
 
 	// Sets the grid size in the DP
 	pPanelGraphic->SetGridSize(pGridSize);
+}
+
+void MainWindow::OnPlayButtonClicked(wxCommandEvent& event)
+{
+
+}
+
+void MainWindow::OnPauseButtonClicked(wxCommandEvent& event)
+{
+
+}
+
+void MainWindow::OnNextButtonClicked(wxCommandEvent& event)
+{
+
+}
+
+void MainWindow::OnTrashButtonClicked(wxCommandEvent& event)
+{
+
 }
