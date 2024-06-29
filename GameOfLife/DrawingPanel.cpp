@@ -31,12 +31,8 @@ void DrawingPanel::OnPaint(wxPaintEvent& paintEvent)
 	context->SetPen(*wxBLACK);
 	// Brush color. Represents the fill color of the shapes made
 	context->SetBrush(*wxWHITE);
-	// Draws a rectangle shape on the drawing panel
-	//context->DrawRectangle(2, 5, 200, 200);
 
 	// Draws grid. Cells for the grid adjust themselves to match the size of the window
-	// Currently only works for preset grid size, does not adjust when resizing window after game is open
-
 	float cellWidth = this->GetSize().x / (float)pGridSize;
 	float cellHeight = this->GetSize().y / (float)pGridSize;
 
@@ -44,6 +40,16 @@ void DrawingPanel::OnPaint(wxPaintEvent& paintEvent)
 	{
 		for (int j = 0; j < pGridSize; j++)
 		{
+			if (pGameBoard[i][j] == true)
+			{
+				// Cell in the grid is alive
+				context->SetBrush(*wxLIGHT_GREY);
+			}
+			else if (pGameBoard[i][j] == false)
+			{
+				// Cell in the grid is dead
+				context->SetBrush(*wxWHITE);
+			}
 			context->DrawRectangle(i * cellWidth, j * cellHeight, cellWidth, cellHeight);
 		}
 	}
@@ -62,25 +68,28 @@ void DrawingPanel::SetGridSize(int size)
 
 void DrawingPanel::OnMouseUp(wxMouseEvent& event)
 {
-	//X and Y coordinate of where the mouse was clicked
+	// X and Y coordinate of where the mouse was clicked
 	wxCoord pMouseClickXCoord = event.GetX();
 	wxCoord pMouseClickYCoord = event.GetY();
 
 	float cellWidth = this->GetSize().x / (float)pGridSize;
 	float cellHeight = this->GetSize().y / (float)pGridSize;
 
-	//Determines which box was clicked the grid
+	// Determines which box was clicked the grid
 	pMouseClickXCoord = pMouseClickXCoord / cellWidth;
 	pMouseClickYCoord = pMouseClickYCoord / cellHeight;
 
-	//Checks if box clicked is true or false and sets it to the opposite.
+	// Checks if box clicked is true or false and sets it to the opposite.
 	// True becomes false and false becomes true
+	// True means living cell. False means dead cell
 	if (pGameBoard[pMouseClickXCoord][pMouseClickYCoord] == true)
 	{
+		// Living cell becomes dead cell
 		pGameBoard[pMouseClickXCoord][pMouseClickYCoord] = false;
 	}
 	else
 	{
+		// Dead cell becomes living cell
 		pGameBoard[pMouseClickXCoord][pMouseClickYCoord] = true;
 	}
 
