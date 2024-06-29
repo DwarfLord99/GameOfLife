@@ -7,9 +7,13 @@ class MainWindow :
 {
 private:
     int pGridSize = 15;
+    int pLivingCellCount;
+    int pCellGenerationCount;
 
     DrawingPanel* pPanelGraphic = nullptr;
     std::vector<std::vector<bool>> pGameBoard;
+
+    wxStatusBar* pStatusBar;
 public:
     // Constructor and destructor for the Main Window
     MainWindow();
