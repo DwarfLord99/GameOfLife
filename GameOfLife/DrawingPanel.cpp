@@ -2,14 +2,16 @@
 #include "wx/graphics.h"
 #include "wx/dcbuffer.h"
 
+wxBEGIN_EVENT_TABLE(DrawingPanel, wxPanel)
+	EVT_PAINT(DrawingPanel::OnPaint, this)
+	EVT_LEFT_UP(DrawingPanel::OnMouseUp)
+wxEND_EVENT_TABLE()
+
 DrawingPanel::DrawingPanel(wxFrame* parent, std::vector<std::vector<bool>>& gameBoard) : 
 	wxPanel(parent, wxID_ANY, wxPoint(0,0), wxSize(400,400)), pGameBoard(gameBoard)
 {
 	// Gives control of the rendering of DrawingPanel
 	this->SetBackgroundStyle(wxBG_STYLE_PAINT);
-	// Tells DrawingPanel to use the OnPaint method
-	this->Bind(wxEVT_PAINT, &DrawingPanel::OnPaint, this);
-	this->Bind(wxEVT_LEFT_UP, &DrawingPanel::OnMouseUp, this);
 }
 
 DrawingPanel::~DrawingPanel()

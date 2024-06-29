@@ -16,5 +16,7 @@ public:
     void SetDrawingPanelSize(wxSize& windowSize);
     void SetGridSize(int size);
     void OnMouseUp(wxMouseEvent& event);
+
+    wxDECLARE_EVENT_TABLE();
 };
 

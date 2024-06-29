@@ -1,10 +1,13 @@
 #include "MainWindow.h"
 
+wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
+	EVT_SIZE(MainWindow::OnSizeChange)
+wxEND_EVENT_TABLE()
+
 MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Game of Life", wxPoint(0,0), wxSize(400,400))
 {
 	pPanelGraphic = new DrawingPanel(this, pGameBoard);
 
-	Bind(wxEVT_SIZE, &MainWindow::OnSizeChange, this);
 	InitializeGameBoard();
 }
 

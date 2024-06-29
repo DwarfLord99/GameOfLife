@@ -17,5 +17,7 @@ public:
 
     void OnSizeChange(wxSizeEvent& event);
     void InitializeGameBoard();
+
+    wxDECLARE_EVENT_TABLE();
 };
 
