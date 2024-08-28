@@ -14,7 +14,8 @@ wxEND_EVENT_TABLE()
 
 MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Game of Life", wxPoint(0,0), wxSize(400,400))
 {
-	pStatusBar = CreateStatusBar();
+	pStatusBar = CreateStatusBar(2);
+	UpdateStatusBarText(pLivingCellCount, pGenerationCount);
 	
 	wxBitmap playIcon(play_xpm);
 	wxBitmap pauseIcon(pause_xpm);
@@ -65,6 +66,20 @@ void MainWindow::InitializeGameBoard()
 	pPanelGraphic->SetGridSize(pGridSize);
 }
 
+void MainWindow::UpdateStatusBarText(int livingCellCount, int generationCount)
+{
+	//Update text shown in the status bar
+
+	wxString _livingCellCount = wxString::Format(wxT("%d"), livingCellCount);
+	wxString _generationCount = wxString::Format(wxT("%d"), generationCount);
+
+	wxString cellCountMessage = wxString::Format("Living Cell Count: " + _livingCellCount);
+	wxString generationCountMessage = wxString::Format("Generation Count: " + _generationCount);
+
+	pStatusBar->SetStatusText(cellCountMessage, 0);
+	pStatusBar->SetStatusText(generationCountMessage, 1);
+}
+
 void MainWindow::OnPlayButtonClicked(wxCommandEvent& event)
 {
 
@@ -77,10 +92,92 @@ void MainWindow::OnPauseButtonClicked(wxCommandEvent& event)
 
 void MainWindow::OnNextButtonClicked(wxCommandEvent& event)
 {
-
+	NextCellGeneration();
 }
 
 void MainWindow::OnTrashButtonClicked(wxCommandEvent& event)
 {
 
+}
+
+void MainWindow::NextCellGeneration()
+{
+	// Sandbox variable to handle the calculations of which cell lives or dies
+	std::vector<std::vector<bool>> sandbox;
+
+	// Resizes the sandbox to math the size of the main grid
+	sandbox.resize(pGridSize);
+
+	// Resize each subvector of the sandbox to math the grid size
+	for (int innerSandboxVector = 0; innerSandboxVector < sandbox.size(); innerSandboxVector++)
+	{
+		sandbox[innerSandboxVector].resize(pGridSize);
+	}
+
+	for (int cellRow = 0; cellRow < pGridSize; cellRow++)
+	{
+		for (int cellColumn = 0; cellColumn < pGridSize; cellColumn++)
+		{
+			pCellNeighborCount = CellNeighborCount(cellRow, cellColumn);
+
+			if (pGameBoard[cellRow][cellColumn] == true && pCellNeighborCount == 2 || 
+				pGameBoard[cellRow][cellColumn] == true && pCellNeighborCount == 3)
+			{
+				sandbox[cellRow][cellColumn] = true;
+				pLivingCellCount++;
+			}
+			else if (pGameBoard[cellRow][cellColumn] == true && pCellNeighborCount < 2 ||
+				pGameBoard[cellRow][cellColumn] == true && pCellNeighborCount > 3)
+			{
+				sandbox[cellRow][cellColumn] = false;
+			}
+			else if (pGameBoard[cellRow][cellColumn] == false && pCellNeighborCount == 3)
+			{
+				sandbox[cellRow][cellColumn] = true;
+				pLivingCellCount++;
+			}
+
+			pCellNeighborCount = 0;
+		}
+	}
+
+	pGameBoard.swap(sandbox);
+
+	pGenerationCount++;
+
+	UpdateStatusBarText(pLivingCellCount, pGenerationCount);
+
+	pLivingCellCount = 0;
+
+	pPanelGraphic->Refresh();
+}
+
+int MainWindow::CellNeighborCount(int cellRow, int cellColumn)
+{
+	// Checks for how many neighbors a cell has
+	for (int i = -1; i < 2; i++)
+	{
+		for (int j = -1; j < 2; j++)
+		{
+			if (i == 0 && j == 0) { continue; }
+
+			if (pGameBoard[cellRow][cellColumn] == true || pGameBoard[cellRow][cellColumn] == false)
+			{
+				if (cellRow + i >= 0 && cellRow + i < pGameBoard.size() || 
+					cellRow + i < 0 && cellRow + i < pGameBoard.size())
+				{
+					if (cellColumn + j >= 0 && cellColumn + j < pGameBoard.size() ||
+						cellColumn + j < 0 && cellColumn + j < pGameBoard.size())
+					{
+						if (pGameBoard[cellRow + i][cellColumn + j] == true)
+						{
+							pCellNeighborCount++;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return pCellNeighborCount;
 }
