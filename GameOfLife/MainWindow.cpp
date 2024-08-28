@@ -14,7 +14,7 @@ wxEND_EVENT_TABLE()
 
 MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Game of Life", wxPoint(0,0), wxSize(400,400))
 {
-	pStatusBar = CreateStatusBar(2);
+	pStatusBar = CreateStatusBar(3);
 	UpdateStatusBarText(pLivingCellCount, pGenerationCount);
 	
 	wxBitmap playIcon(play_xpm);
@@ -76,8 +76,8 @@ void MainWindow::UpdateStatusBarText(int livingCellCount, int generationCount)
 	wxString cellCountMessage = wxString::Format("Living Cell Count: " + _livingCellCount);
 	wxString generationCountMessage = wxString::Format("Generation Count: " + _generationCount);
 
-	pStatusBar->SetStatusText(cellCountMessage, 0);
-	pStatusBar->SetStatusText(generationCountMessage, 1);
+	pStatusBar->SetStatusText(cellCountMessage, 1);
+	pStatusBar->SetStatusText(generationCountMessage, 2);
 }
 
 void MainWindow::OnPlayButtonClicked(wxCommandEvent& event)
@@ -97,7 +97,21 @@ void MainWindow::OnNextButtonClicked(wxCommandEvent& event)
 
 void MainWindow::OnTrashButtonClicked(wxCommandEvent& event)
 {
+	// clears the board and resets all values to default
+	for (int i = 0; i < pGameBoard.size(); i++)
+	{
+		for (int j = 0; j < pGameBoard.size(); j++)
+		{
+			pGameBoard[i][j] = false;
+		}
+	}
 
+	pLivingCellCount = 0;
+	pGenerationCount = 0;
+
+	UpdateStatusBarText(pLivingCellCount, pGenerationCount);
+
+	pPanelGraphic->Refresh();
 }
 
 void MainWindow::NextCellGeneration()
