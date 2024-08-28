@@ -10,12 +10,14 @@ private:
     int pLivingCellCount = 0;
     int pCellNeighborCount = 0;
     int pGenerationCount = 0;
+    int pCellGenerationTimeInterval = 50;
 
     DrawingPanel* pPanelGraphic = nullptr;
     std::vector<std::vector<bool>> pGameBoard;
 
     wxStatusBar* pStatusBar;
     wxToolBar* pToolBar;
+    wxTimer* pCellTimer;
 public:
     // Constructor and destructor for the Main Window
     MainWindow();
@@ -32,6 +34,8 @@ public:
 
     void NextCellGeneration();
     int CellNeighborCount(int cellRow, int cellColumn);
+
+    void CellGenerationTimer(wxTimerEvent& event);
 
     wxDECLARE_EVENT_TABLE();
 };

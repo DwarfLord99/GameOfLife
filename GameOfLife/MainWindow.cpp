@@ -10,6 +10,7 @@ wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
 	EVT_MENU(10002, MainWindow::OnPauseButtonClicked)
 	EVT_MENU(10003, MainWindow::OnNextButtonClicked)
 	EVT_MENU(10004, MainWindow::OnTrashButtonClicked)
+	EVT_TIMER(10005, MainWindow::CellGenerationTimer)
 wxEND_EVENT_TABLE()
 
 MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Game of Life", wxPoint(0,0), wxSize(400,400))
@@ -30,6 +31,7 @@ MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Game of Life", wxPoint(0,
 	pToolBar->Realize();
 
 	pPanelGraphic = new DrawingPanel(this, pGameBoard);
+	pCellTimer = new wxTimer(this, 10005);
 
 	InitializeGameBoard();
 	this->Layout();
@@ -82,12 +84,12 @@ void MainWindow::UpdateStatusBarText(int livingCellCount, int generationCount)
 
 void MainWindow::OnPlayButtonClicked(wxCommandEvent& event)
 {
-
+	pCellTimer->Start(pCellGenerationTimeInterval);
 }
 
 void MainWindow::OnPauseButtonClicked(wxCommandEvent& event)
 {
-
+	pCellTimer->Stop();
 }
 
 void MainWindow::OnNextButtonClicked(wxCommandEvent& event)
@@ -194,4 +196,9 @@ int MainWindow::CellNeighborCount(int cellRow, int cellColumn)
 	}
 
 	return pCellNeighborCount;
+}
+
+void MainWindow::CellGenerationTimer(wxTimerEvent& event)
+{
+	NextCellGeneration();
 }
