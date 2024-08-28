@@ -33,6 +33,7 @@ MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Game of Life", wxPoint(0,
 	pPanelGraphic = new DrawingPanel(this, pGameBoard);
 	pCellTimer = new wxTimer(this, 10005);
 
+	pPanelGraphic->SetGameSettings(gameSettings);
 	InitializeGameBoard();
 	this->Layout();
 }
@@ -56,16 +57,16 @@ void MainWindow::OnSizeChange(wxSizeEvent& event)
 void MainWindow::InitializeGameBoard()
 {
 	// GameBoard size set to the grid size
-	pGameBoard.resize(pGridSize);
+	pGameBoard.resize(gameSettings.GridSize);
 
 	// Subvector of GameBoard vector set to grid size
-	for (int i = 0; i < pGridSize; i++)
+	for (int i = 0; i < gameSettings.GridSize; i++)
 	{
-		pGameBoard[i].resize(pGridSize);
+		pGameBoard[i].resize(gameSettings.GridSize);
 	}
 
 	// Sets the grid size in the DP
-	pPanelGraphic->SetGridSize(pGridSize);
+	pPanelGraphic->SetGridSize(gameSettings.GridSize);
 }
 
 void MainWindow::UpdateStatusBarText(int livingCellCount, int generationCount)
@@ -84,7 +85,7 @@ void MainWindow::UpdateStatusBarText(int livingCellCount, int generationCount)
 
 void MainWindow::OnPlayButtonClicked(wxCommandEvent& event)
 {
-	pCellTimer->Start(pCellGenerationTimeInterval);
+	pCellTimer->Start(gameSettings.TimerInterval);
 }
 
 void MainWindow::OnPauseButtonClicked(wxCommandEvent& event)
@@ -122,17 +123,17 @@ void MainWindow::NextCellGeneration()
 	std::vector<std::vector<bool>> sandbox;
 
 	// Resizes the sandbox to math the size of the main grid
-	sandbox.resize(pGridSize);
+	sandbox.resize(gameSettings.GridSize);
 
 	// Resize each subvector of the sandbox to math the grid size
 	for (int innerSandboxVector = 0; innerSandboxVector < sandbox.size(); innerSandboxVector++)
 	{
-		sandbox[innerSandboxVector].resize(pGridSize);
+		sandbox[innerSandboxVector].resize(gameSettings.GridSize);
 	}
 
-	for (int cellRow = 0; cellRow < pGridSize; cellRow++)
+	for (int cellRow = 0; cellRow < gameSettings.GridSize; cellRow++)
 	{
-		for (int cellColumn = 0; cellColumn < pGridSize; cellColumn++)
+		for (int cellColumn = 0; cellColumn < gameSettings.GridSize; cellColumn++)
 		{
 			pCellNeighborCount = CellNeighborCount(cellRow, cellColumn);
 

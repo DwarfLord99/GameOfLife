@@ -1,24 +1,25 @@
 #pragma once
 #include "wx/wx.h"
 #include "DrawingPanel.h"
+#include "GameSettings.h"
 
 class MainWindow :
     public wxFrame
 {
 private:
-    int pGridSize = 3;
     int pLivingCellCount = 0;
     int pCellNeighborCount = 0;
     int pGenerationCount = 0;
-    int pCellGenerationTimeInterval = 50;
 
     DrawingPanel* pPanelGraphic = nullptr;
     std::vector<std::vector<bool>> pGameBoard;
 
     wxStatusBar* pStatusBar;
     wxToolBar* pToolBar;
-    wxTimer* pCellTimer;
+    wxTimer* pCellTimer;    
 public:
+    GameSettings gameSettings;
+
     // Constructor and destructor for the Main Window
     MainWindow();
     ~MainWindow();

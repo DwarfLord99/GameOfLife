@@ -35,12 +35,12 @@ void DrawingPanel::OnPaint(wxPaintEvent& paintEvent)
 	context->SetBrush(*wxWHITE);
 
 	// Draws grid. Cells for the grid adjust themselves to match the size of the window
-	float cellWidth = this->GetSize().x / (float)pGridSize;
-	float cellHeight = this->GetSize().y / (float)pGridSize;
+	float cellWidth = this->GetSize().x / (float)pGameSettings->GridSize;
+	float cellHeight = this->GetSize().y / (float)pGameSettings->GridSize;
 
-	for (int i = 0; i < pGridSize; i++)
+	for (int i = 0; i < pGameSettings->GridSize; i++)
 	{
-		for (int j = 0; j < pGridSize; j++)
+		for (int j = 0; j < pGameSettings->GridSize; j++)
 		{
 			if (pGameBoard[i][j] == true)
 			{
@@ -65,7 +65,7 @@ void DrawingPanel::SetDrawingPanelSize(wxSize& windowSize)
 
 void DrawingPanel::SetGridSize(int size)
 {
-	pGridSize = size;
+	pGameSettings->GridSize = size;
 }
 
 void DrawingPanel::OnMouseUp(wxMouseEvent& event)
@@ -74,8 +74,8 @@ void DrawingPanel::OnMouseUp(wxMouseEvent& event)
 	wxCoord pMouseClickXCoord = event.GetX();
 	wxCoord pMouseClickYCoord = event.GetY();
 
-	float cellWidth = this->GetSize().x / (float)pGridSize;
-	float cellHeight = this->GetSize().y / (float)pGridSize;
+	float cellWidth = this->GetSize().x / (float)pGameSettings->GridSize;
+	float cellHeight = this->GetSize().y / (float)pGameSettings->GridSize;
 
 	// Determines which box was clicked the grid
 	pMouseClickXCoord = pMouseClickXCoord / cellWidth;
@@ -96,4 +96,9 @@ void DrawingPanel::OnMouseUp(wxMouseEvent& event)
 	}
 
 	Refresh();
+}
+
+void DrawingPanel::SetGameSettings(GameSettings& gameSetting)
+{
+	pGameSettings = &gameSetting;
 }
