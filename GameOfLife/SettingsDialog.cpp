@@ -13,6 +13,7 @@ wxEND_EVENT_TABLE()
 SettingsDialog::SettingsDialog(wxWindow* parent) : 
 	wxDialog(parent, wxID_ANY, "Settings", wxPoint(100,100), wxSize(300,300))
 {
+	// Box sizer that will contain the setting options
 	wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
 	SetSizer(sizer);
 

@@ -45,12 +45,12 @@ void DrawingPanel::OnPaint(wxPaintEvent& paintEvent)
 			if (pGameBoard[i][j] == true)
 			{
 				// Cell in the grid is alive
-				context->SetBrush(*wxLIGHT_GREY);
+				context->SetBrush(pGameSettings->GetLivingCellColor());
 			}
 			else if (pGameBoard[i][j] == false)
 			{
 				// Cell in the grid is dead
-				context->SetBrush(*wxWHITE);
+				context->SetBrush(pGameSettings->GetDeadCellColor());
 			}
 			context->DrawRectangle(i * cellWidth, j * cellHeight, cellWidth, cellHeight);
 		}

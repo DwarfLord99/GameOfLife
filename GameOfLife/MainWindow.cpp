@@ -3,6 +3,7 @@
 #include "next.xpm"
 #include "pause.xpm"
 #include "trash.xpm"
+#include "SettingsDialog.h"
 
 wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
 	EVT_SIZE(MainWindow::OnSizeChange)
@@ -11,12 +12,20 @@ wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
 	EVT_MENU(10003, MainWindow::OnNextButtonClicked)
 	EVT_MENU(10004, MainWindow::OnTrashButtonClicked)
 	EVT_TIMER(10005, MainWindow::CellGenerationTimer)
+	EVT_MENU(10006, MainWindow::OnOptionsButtonClicked)
 wxEND_EVENT_TABLE()
 
 MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Game of Life", wxPoint(0,0), wxSize(400,400))
 {
 	pStatusBar = CreateStatusBar(3);
 	UpdateStatusBarText(pLivingCellCount, pGenerationCount);
+
+	pMenuBar = new wxMenuBar();
+	SetMenuBar(pMenuBar);
+
+	pOptionsMenu = new wxMenu();
+	pOptionsMenu->Append(10006, "Settings");
+	pMenuBar->Append(pOptionsMenu, "Options");
 	
 	wxBitmap playIcon(play_xpm);
 	wxBitmap pauseIcon(pause_xpm);
@@ -81,40 +90,6 @@ void MainWindow::UpdateStatusBarText(int livingCellCount, int generationCount)
 
 	pStatusBar->SetStatusText(cellCountMessage, 1);
 	pStatusBar->SetStatusText(generationCountMessage, 2);
-}
-
-void MainWindow::OnPlayButtonClicked(wxCommandEvent& event)
-{
-	pCellTimer->Start(gameSettings.TimerInterval);
-}
-
-void MainWindow::OnPauseButtonClicked(wxCommandEvent& event)
-{
-	pCellTimer->Stop();
-}
-
-void MainWindow::OnNextButtonClicked(wxCommandEvent& event)
-{
-	NextCellGeneration();
-}
-
-void MainWindow::OnTrashButtonClicked(wxCommandEvent& event)
-{
-	// clears the board and resets all values to default
-	for (int i = 0; i < pGameBoard.size(); i++)
-	{
-		for (int j = 0; j < pGameBoard.size(); j++)
-		{
-			pGameBoard[i][j] = false;
-		}
-	}
-
-	pLivingCellCount = 0;
-	pGenerationCount = 0;
-
-	UpdateStatusBarText(pLivingCellCount, pGenerationCount);
-
-	pPanelGraphic->Refresh();
 }
 
 void MainWindow::NextCellGeneration()
@@ -202,4 +177,50 @@ int MainWindow::CellNeighborCount(int cellRow, int cellColumn)
 void MainWindow::CellGenerationTimer(wxTimerEvent& event)
 {
 	NextCellGeneration();
+}
+
+void MainWindow::OnPlayButtonClicked(wxCommandEvent& event)
+{
+	pCellTimer->Start(gameSettings.TimerInterval);
+}
+
+void MainWindow::OnPauseButtonClicked(wxCommandEvent& event)
+{
+	pCellTimer->Stop();
+}
+
+void MainWindow::OnNextButtonClicked(wxCommandEvent& event)
+{
+	NextCellGeneration();
+}
+
+void MainWindow::OnTrashButtonClicked(wxCommandEvent& event)
+{
+	// clears the board and resets all values to default
+	for (int i = 0; i < pGameBoard.size(); i++)
+	{
+		for (int j = 0; j < pGameBoard.size(); j++)
+		{
+			pGameBoard[i][j] = false;
+		}
+	}
+
+	pLivingCellCount = 0;
+	pGenerationCount = 0;
+
+	UpdateStatusBarText(pLivingCellCount, pGenerationCount);
+
+	pPanelGraphic->Refresh();
+}
+
+void MainWindow::OnOptionsButtonClicked(wxCommandEvent& event)
+{
+	SettingsDialog* settingsMenu = new SettingsDialog(this);
+	settingsMenu->SetGameSettings(gameSettings);
+
+	if (settingsMenu->ShowModal() == wxID_OK)
+	{
+		InitializeGameBoard();
+		pPanelGraphic->Refresh();
+	}
 }
