@@ -68,11 +68,13 @@ void SettingsDialog::OnOkButtonClick(wxCommandEvent& event)
 	pGameSettings->SetLivingCellColor(pLivingCellColorPicker->GetColour());
 	pGameSettings->SetDeadCellColor(pDeadCellColorPicker->GetColour());
 
+	pGameSettings->SaveMenuSettings();
 	EndModal(wxID_OK);
 }
 
 void SettingsDialog::OnCancelButtonClick(wxCommandEvent& event)
 {
+	pGameSettings->LoadMenuSettings();
 	EndModal(wxID_CANCEL);
 }
 

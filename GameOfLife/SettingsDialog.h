@@ -9,13 +9,15 @@ class SettingsDialog :
     public wxDialog
 {
 private:
+    
+public:
     wxSpinCtrl* pGridSizeSpinner = nullptr;
     wxSpinCtrl* pTimeIntervalSpinner = nullptr;
     wxColourPickerCtrl* pLivingCellColorPicker = nullptr;
     wxColourPickerCtrl* pDeadCellColorPicker = nullptr;
 
     GameSettings* pGameSettings = nullptr;
-public:
+
     SettingsDialog(wxWindow* parent);
 
     void OnOkButtonClick(wxCommandEvent& event);

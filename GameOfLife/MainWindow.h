@@ -2,6 +2,7 @@
 #include "wx/wx.h"
 #include "DrawingPanel.h"
 #include "GameSettings.h"
+#include "SettingsDialog.h"
 
 class MainWindow :
     public wxFrame

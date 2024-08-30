@@ -1,5 +1,6 @@
 #pragma once
 #include <wx/colour.h>
+#include <fstream>
 
 struct GameSettings
 {
@@ -54,5 +55,19 @@ struct GameSettings
 	{
 		wxColor deadCellColor(DeadCellRed, DeadCellGreen, DeadCellBlue, DeadCellAlpha);
 		return deadCellColor;
+	}
+
+	void SaveMenuSettings()
+	{
+		std::ofstream file("settings.bin", std::ios::out | std::ios::binary);
+		file.write((char*)this, sizeof(GameSettings));
+		file.close();
+	}
+
+	void LoadMenuSettings()
+	{
+		std::ifstream file("settings.bin", std::ios::binary | std::ios::in);
+		file.read((char*)this, sizeof(GameSettings));
+		file.close();
 	}
 };

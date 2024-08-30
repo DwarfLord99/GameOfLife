@@ -3,7 +3,6 @@
 #include "next.xpm"
 #include "pause.xpm"
 #include "trash.xpm"
-#include "SettingsDialog.h"
 
 wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
 	EVT_SIZE(MainWindow::OnSizeChange)
@@ -65,6 +64,7 @@ void MainWindow::OnSizeChange(wxSizeEvent& event)
 
 void MainWindow::InitializeGameBoard()
 {
+	gameSettings.LoadMenuSettings();
 	// GameBoard size set to the grid size
 	pGameBoard.resize(gameSettings.GridSize);
 
@@ -217,6 +217,10 @@ void MainWindow::OnOptionsButtonClicked(wxCommandEvent& event)
 {
 	SettingsDialog* settingsMenu = new SettingsDialog(this);
 	settingsMenu->SetGameSettings(gameSettings);
+	settingsMenu->pGridSizeSpinner->SetValue(gameSettings.GridSize);
+	settingsMenu->pTimeIntervalSpinner->SetValue(gameSettings.TimerInterval);
+	settingsMenu->pLivingCellColorPicker->SetColour(gameSettings.GetLivingCellColor());
+	settingsMenu->pDeadCellColorPicker->SetColour(gameSettings.GetDeadCellColor());
 
 	if (settingsMenu->ShowModal() == wxID_OK)
 	{
