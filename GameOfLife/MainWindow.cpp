@@ -3,6 +3,7 @@
 #include "next.xpm"
 #include "pause.xpm"
 #include "trash.xpm"
+#include "SettingsDialog.h"
 
 wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
 	EVT_SIZE(MainWindow::OnSizeChange)
@@ -12,6 +13,7 @@ wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
 	EVT_MENU(10004, MainWindow::OnTrashButtonClicked)
 	EVT_TIMER(10005, MainWindow::CellGenerationTimer)
 	EVT_MENU(10006, MainWindow::OnOptionsButtonClicked)
+	EVT_MENU(10007, MainWindow::OnNeighborCountClicked)
 wxEND_EVENT_TABLE()
 
 MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Game of Life", wxPoint(0,0), wxSize(400,400))
@@ -25,7 +27,13 @@ MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Game of Life", wxPoint(0,
 	pOptionsMenu = new wxMenu();
 	pOptionsMenu->Append(10006, "Settings");
 	pMenuBar->Append(pOptionsMenu, "Options");
-	
+
+	pViewMenu = new wxMenu();
+	pNeighborShowOption = new wxMenuItem(pViewMenu, 10007, "Neighbor Count", "Displays the number of neighbors each living cell has.", wxITEM_CHECK);
+	pNeighborShowOption->SetCheckable(true);
+	pViewMenu->Append(pNeighborShowOption);
+	pMenuBar->Append(pViewMenu, "Display");
+
 	wxBitmap playIcon(play_xpm);
 	wxBitmap pauseIcon(pause_xpm);
 	wxBitmap nextIcon(next_xpm);
@@ -38,7 +46,7 @@ MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Game of Life", wxPoint(0,
 	pToolBar->AddTool(10004, "Trash", trashIcon);
 	pToolBar->Realize();
 
-	pPanelGraphic = new DrawingPanel(this, pGameBoard);
+	pPanelGraphic = new DrawingPanel(this, pGameBoard, pNeighborCount);
 	pCellTimer = new wxTimer(this, 10005);
 
 	pPanelGraphic->SetGameSettings(gameSettings);
@@ -67,11 +75,13 @@ void MainWindow::InitializeGameBoard()
 	gameSettings.LoadMenuSettings();
 	// GameBoard size set to the grid size
 	pGameBoard.resize(gameSettings.GridSize);
+	pNeighborCount.resize(gameSettings.GridSize);
 
 	// Subvector of GameBoard vector set to grid size
 	for (int i = 0; i < gameSettings.GridSize; i++)
 	{
 		pGameBoard[i].resize(gameSettings.GridSize);
+		pNeighborCount[i].resize(gameSettings.GridSize);
 	}
 
 	// Sets the grid size in the DP
@@ -134,6 +144,17 @@ void MainWindow::NextCellGeneration()
 	}
 
 	pGameBoard.swap(sandbox);
+
+	for (int i = 0; i < gameSettings.GridSize; i++)
+	{
+		for (int j = 0; j < gameSettings.GridSize; j++)
+		{
+			gameSettings.NumberOfLivingNeighborCells = CellNeighborCount(i, j);
+			pNeighborCount[i][j] = gameSettings.NumberOfLivingNeighborCells;
+
+			pCellNeighborCount = 0;
+		}
+	}
 
 	pGenerationCount++;
 
@@ -215,6 +236,7 @@ void MainWindow::OnTrashButtonClicked(wxCommandEvent& event)
 
 void MainWindow::OnOptionsButtonClicked(wxCommandEvent& event)
 {
+	// sets the current values of the settings and displays them in the options menu
 	SettingsDialog* settingsMenu = new SettingsDialog(this);
 	settingsMenu->SetGameSettings(gameSettings);
 	settingsMenu->pGridSizeSpinner->SetValue(gameSettings.GridSize);
@@ -226,5 +248,17 @@ void MainWindow::OnOptionsButtonClicked(wxCommandEvent& event)
 	{
 		InitializeGameBoard();
 		pPanelGraphic->Refresh();
+	}
+}
+
+void MainWindow::OnNeighborCountClicked(wxCommandEvent& event)
+{
+	if (gameSettings.isCountOn == true)
+	{
+		gameSettings.isCountOn = false;
+	}
+	else if (gameSettings.isCountOn == false)
+	{
+		gameSettings.isCountOn = true;
 	}
 }

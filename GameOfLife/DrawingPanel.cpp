@@ -7,8 +7,8 @@ wxBEGIN_EVENT_TABLE(DrawingPanel, wxPanel)
 	EVT_LEFT_UP(DrawingPanel::OnMouseUp)
 wxEND_EVENT_TABLE()
 
-DrawingPanel::DrawingPanel(wxFrame* parent, std::vector<std::vector<bool>>& gameBoard) : 
-	wxPanel(parent, wxID_ANY, wxPoint(0,0), wxSize(400,400)), pGameBoard(gameBoard)
+DrawingPanel::DrawingPanel(wxFrame* parent, std::vector<std::vector<bool>>& gameBoard, std::vector<std::vector<int>>& neighborCount) : 
+	wxPanel(parent, wxID_ANY, wxPoint(0,0), wxSize(400,400)), pGameBoard(gameBoard), pNeighborCount(neighborCount)
 {
 	// Gives control of the rendering of DrawingPanel
 	this->SetBackgroundStyle(wxBG_STYLE_PAINT);
@@ -53,6 +53,21 @@ void DrawingPanel::OnPaint(wxPaintEvent& paintEvent)
 				context->SetBrush(pGameSettings->GetDeadCellColor());
 			}
 			context->DrawRectangle(i * cellWidth, j * cellHeight, cellWidth, cellHeight);
+
+			if (pGameSettings->isCountOn == true)
+			{
+				// Display the number of living neighbor cells
+				double textWidth, textHeight;
+				if (pNeighborCount[i][j] > 0)
+				{
+					context->SetFont(wxFontInfo(16), *wxRED);
+					wxString displayFont = std::to_string(pNeighborCount[i][j]);
+					context->GetTextExtent(displayFont, &textWidth, &textHeight);
+
+					context->DrawText(displayFont, (cellWidth * i) - (textWidth / 2) + (cellWidth / 2),
+						(cellHeight * j) - (textHeight / 2) + (cellHeight / 2));
+				}
+			}
 		}
 	}
 }

@@ -2,7 +2,6 @@
 #include "wx/wx.h"
 #include "DrawingPanel.h"
 #include "GameSettings.h"
-#include "SettingsDialog.h"
 
 class MainWindow :
     public wxFrame
@@ -14,9 +13,13 @@ private:
 
     DrawingPanel* pPanelGraphic = nullptr;
     std::vector<std::vector<bool>> pGameBoard;
+    std::vector<std::vector<int>> pNeighborCount;
 
     wxMenuBar* pMenuBar = nullptr;
     wxMenu* pOptionsMenu = nullptr;
+    wxMenu* pViewMenu = nullptr;
+    wxMenuItem* pNeighborShowOption = nullptr;
+
     wxStatusBar* pStatusBar = nullptr;
     wxToolBar* pToolBar = nullptr;
     wxTimer* pCellTimer = nullptr;    
@@ -41,6 +44,7 @@ public:
     void OnNextButtonClicked(wxCommandEvent& event);
     void OnTrashButtonClicked(wxCommandEvent& event);
     void OnOptionsButtonClicked(wxCommandEvent& event);
+    void OnNeighborCountClicked(wxCommandEvent& event);
     wxDECLARE_EVENT_TABLE();
 };
 

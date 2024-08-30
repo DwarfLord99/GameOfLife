@@ -7,10 +7,11 @@ class DrawingPanel :
 {
 private:
     std::vector<std::vector<bool>>& pGameBoard;
+    std::vector<std::vector<int>>& pNeighborCount;
 
     GameSettings* pGameSettings = nullptr;
 public:
-    DrawingPanel(wxFrame* parent, std::vector<std::vector<bool>>& gameBoard);
+    DrawingPanel(wxFrame* parent, std::vector<std::vector<bool>>& gameBoard, std::vector<std::vector<int>>& neighborCount);
     ~DrawingPanel();
 
     void OnPaint(wxPaintEvent& paintEvent);

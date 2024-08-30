@@ -10,6 +10,8 @@ struct GameSettings
 	int TimerInterval = 50;
 	// variable to store the number of living neighbor cells to display
 	int NumberOfLivingNeighborCells = 0;
+	// bool to turn on orr off the neighbor count display
+	bool isCountOn = false;
 
 	// Cell Color Control
 
